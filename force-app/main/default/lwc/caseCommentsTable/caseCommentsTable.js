@@ -1,8 +1,7 @@
-import { LightningElement, wire, api } from 'lwc'
-import USER_FIELD from '@salesforce/schema/CaseComment.User'
+import { LightningElement } from 'lwc'
+import USER_FIELD from '@salesforce/schema/CaseComment.CreatedById'
 import CREATED_DATE_FIELD from '@salesforce/schema/CaseComment.CreatedDate'
 import BODY_FIELD from '@salesforce/schema/CaseComment.commentBody'
-import getRelatedComments from '@salesforce/apex/caseCommentController.getRelatedComments'
 
 const COLUMNS = [
     { label: 'User', fieldName: USER_FIELD.fieldApiName, type: 'text' },
@@ -11,10 +10,6 @@ const COLUMNS = [
 ]
 
 export default class CaseCommentsTable extends LightningElement {
-    @api recordId
     columns = COLUMNS
-    @wire(getRelatedComments, {
-        caseId: this.recordId
-    })
     caseComments
 }

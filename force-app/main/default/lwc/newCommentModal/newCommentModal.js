@@ -1,12 +1,11 @@
-import UserPreferencesRecordHomeSectionCollapseWTShown from '@salesforce/schema/User.UserPreferencesRecordHomeSectionCollapseWTShown';
 import { LightningElement } from 'lwc';
 
 export default class NewCommentModal extends LightningElement {
     commentBody
 
-    handleClose(event){
+    handleClose(){
         this.commentBody = undefined
-        this.dispatchEvent(new CustomEvent('closeModal',{
+        this.dispatchEvent(new CustomEvent('closemodal',{
             bubbles: true
         }))
     }
@@ -15,8 +14,8 @@ export default class NewCommentModal extends LightningElement {
         this.commentBody = event.target.value
     }
     
-    handleSave(event){
-        this.dispatchEvent(new CustomEvent('saveComment',{
+    handleSave(){
+        this.dispatchEvent(new CustomEvent('savecomment',{
             bubbles: true,
             body: this.commentBody
         }))
