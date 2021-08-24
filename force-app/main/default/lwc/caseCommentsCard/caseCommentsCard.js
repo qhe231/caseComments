@@ -1,4 +1,5 @@
 import { LightningElement, api, wire } from 'lwc'
+import { NavigationMixin } from 'lightning/navigation'
 import getRelatedComments from '@salesforce/apex/CaseCommentController.getRelatedComments'
 import saveComment from '@salesforce/apex/CaseCommentController.saveComment'
 
@@ -12,10 +13,10 @@ const COLUMNS = [
     { label: 'Comment', fieldName: BODY_FIELD.fieldApiName, type: 'text' }
 ]
 
-export default class CaseCommentsCard extends LightningElement {
+export default class CaseCommentsCard extends NavigationMixin(LightningElement) {
     isModalDisplayed = false
-    numCase = 0
     columns = COLUMNS
+    numCases = 0
 
     @api recordId
     @wire(getRelatedComments, { caseId: '$recordId' }) caseComments
@@ -35,6 +36,18 @@ export default class CaseCommentsCard extends LightningElement {
 
     handleOpenModal() {
         this.isModalDisplayed = true
+    }
+
+    navigateToCaseComments() {
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordRelationshipPage',
+            attributes: {
+                recordId: this.recordId,
+                objectApiName: 'Case',
+                relationshipApiName: 'CaseComments',
+                actionName: 'view'
+            }
+        })
     }
 
 }
