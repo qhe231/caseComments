@@ -24,7 +24,6 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
 
     handleCloseModal() {
         this.isModalDisplayed = false
-
     }
 
     handleSaveComment(event) {
