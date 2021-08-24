@@ -4,7 +4,7 @@ public with sharing class CaseCommentController {
 		System.debug('called');
 		try {
             List<CaseComment> caseComments = [
-				SELECT CreatedById, CreatedDate, CommentBody
+				SELECT Id, CreatedById, CreatedDate, CommentBody
 				FROM CaseComment
 				WHERE ParentId = :caseId
 				                 WITH SECURITY_ENFORCED

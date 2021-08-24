@@ -23,13 +23,42 @@
             </header>
         </div>
         <div class="slds-card__body slds-card__body_inner">
-            <template if:true={caseComments.data}>
-                <lightning-datatable key-field="Id" data={caseComments.data} columns={columns}>
-                </lightning-datatable>
-            </template>
-            <template if:true={caseComments.error}>
-                <p>{caseComments.error.message}</p>
-            </template>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="Case Comments">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="User">User</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Created Date">Created Date</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Comment">Comment</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template if:true={caseComments.data}>
+                        <template for:each={caseComments.data} for:item="comment">
+                            <tr key={comment.Id}>
+                                <th data-label="User" scope="row" key={comment.Id}>
+                                    <div class="slds-truncate">
+                                        <a href="#" tabindex="-1">{comment.CreatedById}</a>
+                                    </div>
+                                </th>
+                                <td data-label="Created Date" key={comment.Id}>
+                                    <div class="slds-truncate">{comment.CreatedDate}</div>
+                                </td>
+                                <td data-label="Comment" key={comment.Id}>
+                                    <div class="slds-truncate">{comment.CommentBody}</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+            <!--             <lightning-datatable key-field="Id" data={caseComments.data} columns={columns}>
+            </lightning-datatable> -->
         </div>
         <footer class="slds-card__footer">
             <a class="slds-card__footer-action" onclick={navigateToCaseComments}>View All
