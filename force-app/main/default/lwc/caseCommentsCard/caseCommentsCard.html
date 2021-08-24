@@ -38,8 +38,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <template if:true={caseComments.data}>
-                        <template for:each={caseComments.data} for:item="comment">
+                    <template if:true={comments}>
+                        <template for:each={comments} for:item="comment">
                             <tr key={comment.Id}>
                                 <th data-label="User" scope="row" key={comment.Id}>
                                     <div class="slds-truncate">

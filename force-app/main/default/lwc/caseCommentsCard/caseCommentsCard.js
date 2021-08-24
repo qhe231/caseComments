@@ -16,11 +16,23 @@ const COLUMNS = [
 export default class CaseCommentsCard extends NavigationMixin(LightningElement) {
     isModalDisplayed = false
     // columns = COLUMNS
-    numCases = 0
+    @track numCases = 0
+    @track comments
 
     @api recordId
     @wire(getRelatedComments, { caseId: '$recordId' })
-    caseComments
+    caseComments({data, error}){
+        if(data){
+            this.comments = data
+            if (data.length <= 6){
+                this.numCases = data.length
+            } else {
+                this.numCases = '6+'
+            }
+        } else {
+            this.numCases = 0
+        }
+    }
 
     handleCloseModal() {
         this.isModalDisplayed = false
