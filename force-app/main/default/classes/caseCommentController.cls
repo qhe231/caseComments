@@ -3,7 +3,7 @@ public with sharing class CaseCommentController {
 	public static List<CaseComment> getRelatedComments(Id caseId){
 		try {
             List<CaseComment> caseComments = [
-				SELECT Id, CreatedById, CreatedDate, CommentBody
+				SELECT Id, CreatedBy.Name, CreatedDate, CommentBody
 				FROM CaseComment
 				WHERE ParentId = :caseId
 				                 WITH SECURITY_ENFORCED
