@@ -1,7 +1,6 @@
 public with sharing class CaseCommentController {
 	@AuraEnabled(cacheable=true)
 	public static List<CaseComment> getRelatedComments(Id caseId){
-		System.debug('called');
 		try {
             List<CaseComment> caseComments = [
 				SELECT Id, CreatedById, CreatedDate, CommentBody
@@ -10,19 +9,20 @@ public with sharing class CaseCommentController {
 				                 WITH SECURITY_ENFORCED
 				                 ORDER BY CreatedDate DESC
 			];
-
-            System.debug(caseComments);
 			return caseComments;
 		} catch (Exception e) {
 			throw new AuraHandledException(e.getMessage());
 		}
 	}
-	@AuraEnabled(cacheable=true)
+
+	@AuraEnabled(cacheable=false)
 	public static CaseComment saveComment(Id caseId, String commentBody){
+
 		try {
 			CaseComment cc = new CaseComment();
 			cc.parentId = caseId;
 			cc.commentBody = commentBody;
+            cc.isPublished = true;
 			insert cc;
 			return cc;
 		} catch (Exception e) {

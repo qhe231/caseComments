@@ -3,21 +3,21 @@ import { LightningElement } from 'lwc';
 export default class NewCommentModal extends LightningElement {
     commentBody
 
-    handleClose(){
+    handleClose() {
         this.commentBody = undefined
-        this.dispatchEvent(new CustomEvent('closemodal',{
+        this.dispatchEvent(new CustomEvent('closemodal', {
             bubbles: true
         }))
     }
 
-    handleChange(event){
+    handleChange(event) {
         this.commentBody = event.target.value
     }
-    
-    handleSave(){
-        this.dispatchEvent(new CustomEvent('savecomment',{
+
+    handleSave() {
+        this.dispatchEvent(new CustomEvent('savecomment', {
             bubbles: true,
-            body: this.commentBody
+            detail: this.commentBody
         }))
     }
 

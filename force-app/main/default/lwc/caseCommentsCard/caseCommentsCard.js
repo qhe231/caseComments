@@ -28,9 +28,10 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
     }
 
     handleSaveComment(event) {
-        const comment = event.body
+        const comment = event.detail
+
         saveComment({
-            caseId: '$recordId',
+            caseId: this.recordId,
             commentBody: comment
         })
     }
