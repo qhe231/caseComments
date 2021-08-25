@@ -3,31 +3,21 @@ import { NavigationMixin } from 'lightning/navigation'
 import getRelatedComments from '@salesforce/apex/CaseCommentController.getRelatedComments'
 import saveComment from '@salesforce/apex/CaseCommentController.saveComment'
 
-/* import USER_FIELD from '@salesforce/schema/CaseComment.CreatedById'
-import CREATED_DATE_FIELD from '@salesforce/schema/CaseComment.CreatedDate'
-import BODY_FIELD from '@salesforce/schema/CaseComment.CommentBody'
-
-const COLUMNS = [
-    { label: 'User', fieldName: USER_FIELD.fieldApiName, type: 'text' },
-    { label: 'Created Date', fieldName: CREATED_DATE_FIELD.fieldApiName, type: 'datetime' },
-    { label: 'Comment', fieldName: BODY_FIELD.fieldApiName, type: 'text' }
-] */
-
 export default class CaseCommentsCard extends NavigationMixin(LightningElement) {
     isModalDisplayed = false
-    // columns = COLUMNS
     @track numCases = 0
     @track comments
 
     @api recordId
     @wire(getRelatedComments, { caseId: '$recordId' })
-    caseComments({data, error}){
-        if(data){
-            this.comments = data
-            if (data.length <= 6){
+    caseComments({ data, error }) {
+        if (data) {
+            if (data.length <= 6) {
                 this.numCases = data.length
+                this.comments = data
             } else {
                 this.numCases = '6+'
+                this.comments = data.slice(0, 6)
             }
         } else {
             this.numCases = 0

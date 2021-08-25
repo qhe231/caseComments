@@ -43,7 +43,7 @@
                             <tr key={comment.Id}>
                                 <th data-label="User" scope="row" key={comment.Id}>
                                     <div class="slds-truncate">
-                                        <a href="#" tabindex="-1">{comment.CreatedBy.Name}</a>
+                                        <a tabindex="-1" onclick={navigateToContactDetail}>{comment.CreatedBy.Name}</a>
                                     </div>
                                 </th>
                                 <td data-label="Created Date" key={comment.Id}>
@@ -61,8 +61,6 @@
                     </template>
                 </tbody>
             </table>
-<!--             <lightning-datatable key-field="Id" data={caseComments.data} columns={columns}>
-            </lightning-datatable> -->
         </div>
         <footer class="slds-card__footer">
             <a class="slds-card__footer-action" onclick={navigateToCaseComments}>View All
