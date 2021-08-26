@@ -1,28 +1,35 @@
 import { LightningElement, api, wire, track } from 'lwc'
 import { NavigationMixin } from 'lightning/navigation'
 import { ShowToastEvent } from 'lightning/platformShowToastEvent'
-import { refreshApex } from '@salesforce/apex'
 import getRelatedComments from '@salesforce/apex/CaseCommentController.getRelatedComments'
 import saveComment from '@salesforce/apex/CaseCommentController.saveComment'
+import getNumCommentsToDisplay from '@salesforce/apex/CaseCommentController.getNumCommentsToDisplay'
 
 export default class CaseCommentsCard extends NavigationMixin(LightningElement) {
     isModalDisplayed = false
-    @track numCases = 0
+    @track numCases
     @track comments
-
     @api recordId
-    @wire(getRelatedComments, { caseId: '$recordId' })
-    caseComments({ data, error }) {
+
+    @wire(getNumCommentsToDisplay)
+    numCommentsToDisplay({ data, error }) {
         if (data) {
-            if (data.length <= 6) {
-                this.numCases = data.length
-                this.comments = data
-            } else {
-                this.numCases = '6+'
-                this.comments = data.slice(0, 6)
-            }
-        } else {
-            this.numCases = 0
+            console.log(data)
+            getRelatedComments({ caseId: this.recordId })
+                .then(caseComments => {
+                    if (caseComments) {
+                        console.log(caseComments)
+                        if (caseComments.length <= data) {
+                            this.numCases = caseComments.length
+                            this.comments = caseComments
+                        } else {
+                            this.numCases = data + '+'
+                            this.comments = caseComments.slice(0, data)
+                        }
+                    } else {
+                        this.numCases = 0
+                    }
+                })
         }
     }
 

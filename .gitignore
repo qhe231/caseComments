@@ -38,3 +38,5 @@ $RECYCLE.BIN/
 .env
 
 uncrustify.cfg
+
+manifest
