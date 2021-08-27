@@ -31,6 +31,9 @@
             </c-case-comment-table>
         </div>
         <footer class="slds-card__footer">
+            <button class="slds-button slds-button_neutral" onclick={handlePrev}>Prev</button>
+            &nbsp; Page {pageNum}/{numPages} &nbsp;
+            <button class="slds-button slds-button_neutral" onclick={handleNext}>Next</button>
             <a class="slds-card__footer-action" onclick={handleOpenModal} name="viewAll">View All
                 <span class="slds-assistive-text">Case Comments</span>
             </a>

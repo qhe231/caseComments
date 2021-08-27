@@ -9,8 +9,11 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
     isNewCommentModalDisplayed = false
     isAllCommentsModalDisplayed = false
     @track numCases
+    @track numCasesPerPage
     @track commentsOnCard
     @track allComments
+    @track numPages
+    @track pageNum
     @api recordId
 
     @wire(getCaseCommentSetting)
@@ -19,13 +22,16 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
             getRelatedComments({ caseId: this.recordId })
                 .then(caseComments => {
                     if (caseComments) {
-                        this.allComments = caseComments;
-                        if (caseComments.length <= data.Number_of_Comments_to_Display__c) {
-                            this.numCases = caseComments.length
+                        this.allComments = caseComments
+                        this.pageNum = 1
+                        this.numCases = caseComments.length
+                        this.numCasesPerPage = data.Number_of_Comments_to_Display__c
+                        if (this.numCases <= this.numCasesPerPage) {
                             this.commentsOnCard = caseComments
+                            this.numPages = 1
                         } else {
-                            this.numCases = data.Number_of_Comments_to_Display__c + '+'
-                            this.commentsOnCard = caseComments.slice(0, data.Number_of_Comments_to_Display__c)
+                            this.commentsOnCard = caseComments.slice(0, this.numCasesPerPage)
+                            this.numPages = Math.ceil(this.numCases / this.numCasesPerPage)
                         }
                     } else {
                         this.numCases = 0
@@ -67,8 +73,30 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
     handleOpenModal(event) {
         if (event.detail === 'new') {
             this.isNewCommentModalDisplayed = true
-        } else if (event.target.name === 'viewAll'){
+        } else if (event.target.name === 'viewAll') {
             this.isAllCommentsModalDisplayed = true
         }
+    }
+
+    handlePrev() {
+        if (this.pageNum > 1) {
+            this.pageNum -= 1
+            this.commentsOnCard =
+                this.allComments.slice(this.numCasesPerPage * (this.pageNum - 1), this.numCasesPerPage * this.pageNum)
+        }
+    }
+
+    handleNext() {
+        if (this.pageNum < this.numPages) {
+            this.pageNum += 1
+            if (this.pageNum === this.numPages) {
+                this.commentsOnCard =
+                    this.allComments.slice(this.numCasesPerPage * (this.pageNum - 1), this.numCases)
+            } else {
+                this.commentsOnCard =
+                    this.allComments.slice(this.numCasesPerPage * (this.pageNum - 1), this.numCasesPerPage * this.pageNum)
+            }
+        }
+
     }
 }
