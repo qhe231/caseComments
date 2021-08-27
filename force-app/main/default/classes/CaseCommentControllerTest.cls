@@ -37,17 +37,17 @@ public class CaseCommentControllerTest {
 
 		System.assertEquals(caseId, cc.parentId);
 		System.assertEquals('Test Comment', cc.CommentBody);
-        System.assert(cc.IsPublished);
+		System.assert (cc.IsPublished);
 
 		System.assertEquals(caseId, cc2.parentId);
 		System.assertEquals('Test Comment', cc2.CommentBody);
-        System.assert(cc2.IsPublished);
+		System.assert (cc2.IsPublished);
 	}
 
-    @isTest static void testGetNumCommentsToDisplay(){
-        Decimal numCommentsToDisplay = CaseCommentController.getNumCommentsToDisplay();
-        System.assertEquals(3, numCommentsToDisplay);
-    }
+	@isTest static void testGetCaseCommentSetting(){
+		Case_Comment_Setting__mdt ccs = CaseCommentController.getCaseCommentSetting();
+		System.assertNotEquals(null, ccs);
+	}
 
 	private static Id createMockCase(){
 		Case c =  new Case(Status='New', Origin='Web', Subject='Test Case');

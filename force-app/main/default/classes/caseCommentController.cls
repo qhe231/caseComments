@@ -22,9 +22,7 @@ public with sharing class CaseCommentController {
 	}
 
 	@AuraEnabled(cacheable=true)
-	public static Decimal getNumCommentsToDisplay(){
-		Case_Comment_Setting__mdt ccs =
-			Case_Comment_Setting__mdt.getInstance('Experience_Site');
-		return ccs.Number_of_Comments_to_Display__c;
+	public static Case_Comment_Setting__mdt getCaseCommentSetting(){
+		return Case_Comment_Setting__mdt.getInstance('Experience_Site');
 	}
 }

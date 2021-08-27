@@ -3,7 +3,7 @@ import { NavigationMixin } from 'lightning/navigation'
 import { ShowToastEvent } from 'lightning/platformShowToastEvent'
 import getRelatedComments from '@salesforce/apex/CaseCommentController.getRelatedComments'
 import saveComment from '@salesforce/apex/CaseCommentController.saveComment'
-import getNumCommentsToDisplay from '@salesforce/apex/CaseCommentController.getNumCommentsToDisplay'
+import getCaseCommentSetting from '@salesforce/apex/CaseCommentController.getCaseCommentSetting'
 
 export default class CaseCommentsCard extends NavigationMixin(LightningElement) {
     isModalDisplayed = false
@@ -11,20 +11,19 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
     @track comments
     @api recordId
 
-    @wire(getNumCommentsToDisplay)
+    @wire(getCaseCommentSetting)
     numCommentsToDisplay({ data, error }) {
         if (data) {
-            console.log(data)
             getRelatedComments({ caseId: this.recordId })
                 .then(caseComments => {
                     if (caseComments) {
                         console.log(caseComments)
-                        if (caseComments.length <= data) {
+                        if (caseComments.length <= data.Number_of_Comments_to_Display__c) {
                             this.numCases = caseComments.length
                             this.comments = caseComments
                         } else {
-                            this.numCases = data + '+'
-                            this.comments = caseComments.slice(0, data)
+                            this.numCases = data.Number_of_Comments_to_Display__c + '+'
+                            this.comments = caseComments.slice(0, data.Number_of_Comments_to_Display__c)
                         }
                     } else {
                         this.numCases = 0
