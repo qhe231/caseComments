@@ -1,7 +1,11 @@
 <template>
-    <template if:true={isModalDisplayed}>
+    <template if:true={isNewCommentModalDisplayed}>
         <c-new-comment-modal onclosemodal={handleCloseModal} onsavecomment={handleSaveComment}>
         </c-new-comment-modal>
+    </template>
+    <template if:true={isAllCommentsModalDisplayed}>
+        <c-all-comments-modal onclosemodal={handleCloseModal} comments={allComments}>
+        </c-all-comments-modal>
     </template>
     <article class="slds-card">
         <div class="slds-card__header slds-grid">
@@ -23,47 +27,11 @@
             </header>
         </div>
         <div class="slds-card__body slds-card__body_inner">
-            <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="Case Comments">
-                <thead>
-                    <tr class="slds-line-height_reset">
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="User">User</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Created Date">Created Date</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Comment">Comment</div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template if:true={comments}>
-                        <template for:each={comments} for:item="comment">
-                            <tr key={comment.Id}>
-                                <th data-label="User" scope="row" key={comment.Id}>
-                                    <div class="slds-truncate">
-                                        {comment.CreatedBy.Name}
-                                    </div>
-                                </th>
-                                <td data-label="Created Date" key={comment.Id}>
-                                    <div class="slds-truncate">
-                                        <lightning-formatted-date-time value={comment.CreatedDate} year="numeric"
-                                            month="numeric" day="numeric" hour="2-digit" minute="2-digit">
-                                        </lightning-formatted-date-time>
-                                    </div>
-                                </td>
-                                <td data-label="Comment" key={comment.Id}>
-                                    <div class="slds-truncate">{comment.CommentBody}</div>
-                                </td>
-                            </tr>
-                        </template>
-                    </template>
-                </tbody>
-            </table>
+            <c-case-comment-table comments={commentsOnCard}>
+            </c-case-comment-table>
         </div>
         <footer class="slds-card__footer">
-            <a class="slds-card__footer-action" onclick={navigateToCaseComments}>View All
+            <a class="slds-card__footer-action" onclick={handleOpenModal} name="viewAll">View All
                 <span class="slds-assistive-text">Case Comments</span>
             </a>
         </footer>

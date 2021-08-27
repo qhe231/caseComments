@@ -6,9 +6,11 @@ import saveComment from '@salesforce/apex/CaseCommentController.saveComment'
 import getCaseCommentSetting from '@salesforce/apex/CaseCommentController.getCaseCommentSetting'
 
 export default class CaseCommentsCard extends NavigationMixin(LightningElement) {
-    isModalDisplayed = false
+    isNewCommentModalDisplayed = false
+    isAllCommentsModalDisplayed = false
     @track numCases
-    @track comments
+    @track commentsOnCard
+    @track allComments
     @api recordId
 
     @wire(getCaseCommentSetting)
@@ -17,13 +19,13 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
             getRelatedComments({ caseId: this.recordId })
                 .then(caseComments => {
                     if (caseComments) {
-                        console.log(caseComments)
+                        this.allComments = caseComments;
                         if (caseComments.length <= data.Number_of_Comments_to_Display__c) {
                             this.numCases = caseComments.length
-                            this.comments = caseComments
+                            this.commentsOnCard = caseComments
                         } else {
                             this.numCases = data.Number_of_Comments_to_Display__c + '+'
-                            this.comments = caseComments.slice(0, data.Number_of_Comments_to_Display__c)
+                            this.commentsOnCard = caseComments.slice(0, data.Number_of_Comments_to_Display__c)
                         }
                     } else {
                         this.numCases = 0
@@ -32,8 +34,12 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
         }
     }
 
-    handleCloseModal() {
-        this.isModalDisplayed = false
+    handleCloseModal(event) {
+        if (event.detail === 'new') {
+            this.isNewCommentModalDisplayed = false
+        } else if (event.detail === 'all') {
+            this.isAllCommentsModalDisplayed = false
+        }
     }
 
     handleSaveComment(event) {
@@ -45,7 +51,7 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
         })
             .then(result => {
                 if (result) {
-                    this.isModalDisplayed = false
+                    this.isNewCommentModalDisplayed = false
 
                     const toastEvent = new ShowToastEvent({
                         title: "Case comment was created.",
@@ -58,20 +64,11 @@ export default class CaseCommentsCard extends NavigationMixin(LightningElement) 
             })
     }
 
-    handleOpenModal() {
-        this.isModalDisplayed = true
+    handleOpenModal(event) {
+        if (event.detail === 'new') {
+            this.isNewCommentModalDisplayed = true
+        } else if (event.target.name === 'viewAll'){
+            this.isAllCommentsModalDisplayed = true
+        }
     }
-
-    navigateToCaseComments() {
-        this[NavigationMixin.Navigate]({
-            type: 'standard__recordRelationshipPage',
-            attributes: {
-                recordId: this.recordId,
-                objectApiName: 'Case',
-                relationshipApiName: 'CaseComments',
-                actionName: 'view'
-            }
-        })
-    }
-
 }

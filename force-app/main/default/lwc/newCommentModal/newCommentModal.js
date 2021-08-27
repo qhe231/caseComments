@@ -6,7 +6,8 @@ export default class NewCommentModal extends LightningElement {
     handleClose() {
         this.commentBody = undefined
         this.dispatchEvent(new CustomEvent('closemodal', {
-            bubbles: true
+            bubbles: true,
+            detail: 'new'
         }))
     }
 
