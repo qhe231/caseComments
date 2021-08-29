@@ -19,7 +19,7 @@ The new case comment component excludes the "`public`" checkbox in both the comp
 ![New pop-up modal](images/NewModal.png)
 
 
-## Deliverables
+## Elements
 
 ![Structure](images/Structure.png)
 
